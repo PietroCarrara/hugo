@@ -21,20 +21,48 @@ func New(d *deps.Deps) *Namespace {
 	}
 }
 
-func (n *Namespace) Anko(code interface{}) (interface{}, error) {
+func (n *Namespace) AnkoEnv() *env.Env {
+	env := env.NewEnv()
+	return core.Import(env)
+}
+
+func (n *Namespace) AnkoSet(_env, _name, value interface{}) error {
+	env, ok := _env.(*env.Env)
+	if !ok {
+		return fmt.Errorf("can't use object \"%v\" as an environment", _env)
+	}
+
+	name, err := cast.ToStringE(_name)
+	if err != nil {
+		return err
+	}
+
+	return env.Define(name, value)
+}
+
+func (n *Namespace) Anko(code interface{}, args ...interface{}) (interface{}, error) {
 	out := ""
 
-	env := env.NewEnv()
-	core.Import(env)
+	var e *env.Env
+	var ok bool
+
+	if len(args) == 0 {
+		e = n.AnkoEnv()
+	} else {
+		e, ok = args[0].(*env.Env)
+		if !ok {
+			return nil, fmt.Errorf("can't use object \"%v\" as an environment", args[0])
+		}
+	}
 
 	// Redirect the output
-	env.Define("print", func(a ...interface{}) {
+	e.Define("print", func(a ...interface{}) {
 		out += fmt.Sprint(a...)
 	})
-	env.Define("println", func(a ...interface{}) {
+	e.Define("println", func(a ...interface{}) {
 		out += fmt.Sprintln(a...)
 	})
-	env.Define("printf", func(format string, a ...interface{}) {
+	e.Define("printf", func(format string, a ...interface{}) {
 		out += fmt.Sprintf(format, a...)
 	})
 
@@ -43,7 +71,7 @@ func (n *Namespace) Anko(code interface{}) (interface{}, error) {
 		return nil, err
 	}
 
-	result, err := vm.Execute(env, nil, codeStr)
+	result, err := vm.Execute(e, nil, codeStr)
 	if out != "" {
 		return out, err
 	}

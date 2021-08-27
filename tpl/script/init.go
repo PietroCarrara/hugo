@@ -17,11 +17,26 @@ func init() {
 		}
 
 		ns.AddMethodMapping(
+			ctx.AnkoEnv,
+			[]string{"ankoEnv"},
+			[][2]string{},
+		)
+
+		ns.AddMethodMapping(
+			ctx.AnkoSet,
+			[]string{"ankoSet"},
+			[][2]string{
+				{`{{ ankoSet $env "variable" 1 }}`, ""},
+				{`{{ ankoSet $env "msg" "Hello, World!" }}`, ""},
+			},
+		)
+
+		ns.AddMethodMapping(
 			ctx.Anko,
 			[]string{"anko"},
 			[][2]string{
 				{`{{ anko "1 + 1" }}`, "1"},
-				{`{{ anko "print(\"https://github.com/mattn/anko\")" }}`, "1"},
+				{`{{ anko "print(\"https://github.com/mattn/anko\")" $env }}`, "1"},
 			},
 		)
 
