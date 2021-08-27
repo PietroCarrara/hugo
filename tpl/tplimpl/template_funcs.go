@@ -52,6 +52,7 @@ import (
 	_ "github.com/gohugoio/hugo/tpl/reflect"
 	_ "github.com/gohugoio/hugo/tpl/resources"
 	_ "github.com/gohugoio/hugo/tpl/safe"
+	_ "github.com/gohugoio/hugo/tpl/script"
 	_ "github.com/gohugoio/hugo/tpl/site"
 	_ "github.com/gohugoio/hugo/tpl/strings"
 	_ "github.com/gohugoio/hugo/tpl/templates"

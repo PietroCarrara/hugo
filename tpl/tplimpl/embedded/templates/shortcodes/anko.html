@@ -1,0 +1,10 @@
+{{ $code := .Inner }}
+{{ with (.Get "file") }}
+    {{ $code = readFile . }}
+{{ end }}
+
+{{ if (default true (.Get "escape")) }}
+    {{- anko .Inner -}}
+{{ else }}
+    {{- anko .Inner | safeHTML -}}
+{{ end }}
