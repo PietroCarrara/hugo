@@ -55,6 +55,13 @@ func init() {
 			},
 		)
 
+		ns.AddMethodMapping(ctx.Mkdir,
+			[]string{"mkdir"},
+			[][2]string{
+				{`{{ mkdir "path/to/deep/dir" }}`, ``},
+			},
+		)
+
 		return ns
 	}
 

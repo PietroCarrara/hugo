@@ -1,13 +1,20 @@
-package script
+package julia
 
 import (
+	"github.com/PietroCarrara/gulia"
 	"github.com/gohugoio/hugo/deps"
 	"github.com/gohugoio/hugo/tpl/internal"
+	"golang.design/x/thread"
 )
 
-const name = "script"
+const name = "julia"
 
 func init() {
+	th = thread.New()
+	th.Call(func() {
+		gulia.Open()
+	})
+
 	f := func(d *deps.Deps) *internal.TemplateFuncsNamespace {
 		ctx := New(d)
 
@@ -17,26 +24,20 @@ func init() {
 		}
 
 		ns.AddMethodMapping(
-			ctx.AnkoEnv,
-			[]string{"ankoEnv"},
-			[][2]string{},
-		)
-
-		ns.AddMethodMapping(
-			ctx.AnkoSet,
-			[]string{"ankoSet"},
+			ctx.Eval,
+			[]string{"juliaEval"},
 			[][2]string{
-				{`{{ ankoSet $env "variable" 1 }}`, ""},
-				{`{{ ankoSet $env "msg" "Hello, World!" }}`, ""},
+				{`{{ (juliaEval "1 + 2 + 3").GetValue }}`, "6"},
+				{`{{ (juliaEval "using Plots; plot(sin, -π:0.1:π").GetType }}`, "Plot"},
 			},
 		)
 
 		ns.AddMethodMapping(
-			ctx.Anko,
-			[]string{"anko"},
+			ctx.Call,
+			[]string{"juliaCall"},
 			[][2]string{
-				{`{{ anko "1 + 1" }}`, "1"},
-				{`{{ anko "print(\"https://github.com/mattn/anko\")" $env }}`, "1"},
+				{`{{ juliaCall "sin" 1.2 }}`, "0.9320390859672263"},
+				{`{{ juliaCall "savefig" $plot "my-plog.png" }}`, ""},
 			},
 		)
 

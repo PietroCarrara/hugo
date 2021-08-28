@@ -1,5 +1,0 @@
-{{ if (default true (.Get "escape")) }}
-    {{- anko .Inner -}}
-{{ else }}
-    {{- anko .Inner | safeHTML -}}
-{{ end }}

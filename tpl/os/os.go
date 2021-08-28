@@ -142,3 +142,12 @@ func (ns *Namespace) Stat(i interface{}) (_os.FileInfo, error) {
 
 	return r, nil
 }
+
+func (ns *Namespace) Mkdir(path interface{}) error {
+	str, err := cast.ToStringE(path)
+	if err != nil {
+		return err
+	}
+
+	return _os.MkdirAll(str, 0755)
+}
