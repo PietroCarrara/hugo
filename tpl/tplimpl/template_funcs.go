@@ -34,6 +34,7 @@ import (
 	_ "github.com/gohugoio/hugo/tpl/cast"
 	_ "github.com/gohugoio/hugo/tpl/collections"
 	_ "github.com/gohugoio/hugo/tpl/compare"
+	_ "github.com/gohugoio/hugo/tpl/create-resources"
 	_ "github.com/gohugoio/hugo/tpl/crypto"
 	_ "github.com/gohugoio/hugo/tpl/data"
 	_ "github.com/gohugoio/hugo/tpl/debug"

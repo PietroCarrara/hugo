@@ -16,6 +16,7 @@
 package create
 
 import (
+	"os"
 	"path"
 	"path/filepath"
 	"strings"
@@ -123,6 +124,21 @@ func (c *Client) FromString(targetPath, content string) (resource.Resource, erro
 					return hugio.NewReadSeekerNoOpCloserFromString(content), nil
 				},
 				RelTargetFilename: filepath.Clean(targetPath),
+			})
+	})
+}
+
+// FromString creates a new Resource from a file with the given relative target path.
+func (c *Client) FromFile(destination, source string) (resource.Resource, error) {
+	return c.rs.ResourceCache.GetOrCreate(path.Join(resources.CACHE_OTHER, destination), func() (resource.Resource, error) {
+		return c.rs.New(
+			resources.ResourceSourceDescriptor{
+				Fs:          c.rs.FileCaches.AssetsCache().Fs,
+				LazyPublish: true,
+				OpenReadSeekCloser: func() (hugio.ReadSeekCloser, error) {
+					return os.Open(source)
+				},
+				RelTargetFilename: filepath.Clean(destination),
 			})
 	})
 }
