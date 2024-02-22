@@ -121,6 +121,14 @@ type Extensions struct {
 	LinkifyProtocol string
 	TaskList        bool
 	CJK             CJK
+
+	// Katex
+	Katex Katex
+}
+
+type Katex struct {
+	Enable   bool
+	Warnings bool
 }
 
 // Typographer holds typographer configuration.

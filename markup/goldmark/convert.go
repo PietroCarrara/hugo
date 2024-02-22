@@ -34,6 +34,8 @@ import (
 	"github.com/yuin/goldmark/renderer"
 	"github.com/yuin/goldmark/renderer/html"
 	"github.com/yuin/goldmark/text"
+
+	katex "github.com/graemephi/goldmark-qjs-katex"
 )
 
 const (
@@ -178,6 +180,12 @@ func newMarkdown(pcfg converter.ProviderConfig) goldmark.Markdown {
 			inlineDelimiters,
 			blockDelimiters,
 		))
+	}
+
+	if cfg.Extensions.Katex.Enable {
+		extensions = append(extensions, &katex.Extension{
+			EnableWarnings: cfg.Extensions.Katex.Warnings,
+		})
 	}
 
 	if pcfg.Conf.EnableEmoji() {
